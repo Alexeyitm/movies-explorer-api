@@ -7,7 +7,7 @@ const { DATA_BASE } = require('./utils/config');
 
 const app = express();
 
-const { PORT = 3500 } = process.env;
+const { PORT = 3000 } = process.env;
 
 mongoose.connect(DATA_BASE, {});
 
