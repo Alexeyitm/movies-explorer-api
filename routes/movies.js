@@ -1,7 +1,7 @@
 const { celebrate, Joi } = require('celebrate');
 const router = require('express').Router();
 const { getMovies, createMovie, deleteMovie } = require('../controllers/movies');
-const { regex } = require('../utils/regex/regex');
+const { regex } = require('../utils/regex');
 
 router.get('/', getMovies);
 

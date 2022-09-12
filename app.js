@@ -1,26 +1,20 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { validateUser, validateAuth } = require('./middlewares/validation');
-const { login, createUser } = require('./controllers/users');
-const auth = require('./middlewares/auth');
-const NotFoundError = require('./errors/not-found-error');
-
-const { PORT = 3000 } = process.env;
+const cors = require('cors');
+const router = require('./routes/index');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { DATA_BASE } = require('./utils/config');
 
 const app = express();
-app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/moviesdb', {});
+const { PORT = 3500 } = process.env;
 
-app.post('/signup', validateUser, createUser);
-app.post('/signin', validateAuth, login);
+mongoose.connect(DATA_BASE, {});
 
-app.use('/users', auth, require('./routes/users'));
-app.use('/movies', auth, require('./routes/movies'));
-
-app.use('/*', auth, () => {
-  throw new NotFoundError('К сожалению, запрашиваемая страница не найдена.');
-});
+app.use(cors());
+app.use(requestLogger);
+app.use(router);
+app.use(errorLogger);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

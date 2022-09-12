@@ -57,13 +57,11 @@ module.exports.createMovie = (req, res, next) => {
 
 module.exports.deleteMovie = (req, res, next) => {
   const movieId = req.params.id;
-  const owner = req.user._id;
-  Movie.findOne({ owner, movieId })
+  Movie.findById(movieId)
     .orFail(() => {
       throw new NotFoundError('К сожалению, карточка с указанным id не найдена.');
     })
     .then((movie) => {
-      console.log(movie.country);
       if (req.user._id !== movie.owner.valueOf()) {
         throw new NotEnoughRightsError('К сожалению, нельзя удалить чужую карточку');
       }
