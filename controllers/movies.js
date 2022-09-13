@@ -59,18 +59,18 @@ module.exports.deleteMovie = (req, res, next) => {
   const movieId = req.params.id;
   Movie.findById(movieId)
     .orFail(() => {
-      throw new NotFoundError('К сожалению, карточка с указанным id не найдена.');
+      throw new NotFoundError('К сожалению, карточка фильма с указанным id не найдена.');
     })
     .then((movie) => {
       if (req.user._id !== movie.owner.valueOf()) {
-        throw new NotEnoughRightsError('К сожалению, нельзя удалить чужую карточку');
+        throw new NotEnoughRightsError('К сожалению, нельзя удалить чужую карточку фильма.');
       }
       return movie.remove();
     })
     .then((movie) => res.send({ movie }))
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new SendIncorrectDataError('К сожалению, передан некорректный id карточки'));
+        next(new SendIncorrectDataError('К сожалению, передан некорректный id карточки фильма.'));
         return;
       }
       next(err);
