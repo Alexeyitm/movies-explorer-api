@@ -7,6 +7,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { MONGO_DEV_URL } = require('./utils/config');
 
 const app = express();
+app.use(express.json());
 
 const { PORT = 3000, NODE_ENV, MONGO_PROD_URL } = process.env;
 
