@@ -17,7 +17,7 @@ app.use(cors());
 app.use(requestLogger);
 app.use(router);
 app.use(errorLogger);
-//app.use(error);
+app.use(error);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
