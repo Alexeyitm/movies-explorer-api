@@ -42,8 +42,10 @@ module.exports.createUser = (req, res, next) => {
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
+  console.log(123);
   return User.findUserByCredentials(email, password)
     .then((user) => {
+      console.log(456);
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === 'production' ? JWT_PROD_KEY : JWT_DEV_KEY,
