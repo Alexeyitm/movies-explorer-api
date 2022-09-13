@@ -1,5 +1,7 @@
-const DATA_BASE = 'mongodb://localhost:27017/moviesdb';
+const MONGO_DEV_URL = 'mongodb://localhost:27017/moviesdb';
+const JWT_DEV_KEY = 'dev-secret';
 
 module.exports = {
-  DATA_BASE,
+  MONGO_DEV_URL,
+  JWT_DEV_KEY,
 };

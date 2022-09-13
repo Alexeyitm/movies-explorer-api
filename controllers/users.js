@@ -4,8 +4,9 @@ const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-error');
 const SendIncorrectDataError = require('../errors/send-incorrect-data-error');
 const UserFoundError = require('../errors/user-found-error');
+const { JWT_DEV_KEY } = require('../utils/config');
 
-const { NODE_ENV, JWT_SECRET = 'dev-key' } = process.env;
+const { NODE_ENV, JWT_PROD_KEY } = process.env;
 
 module.exports.createUser = (req, res, next) => {
   const {
@@ -45,7 +46,7 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'dev-key',
+        NODE_ENV === 'production' ? JWT_PROD_KEY : JWT_DEV_KEY,
         { expiresIn: '7d' },
       );
       res.send({ token });
