@@ -9,6 +9,7 @@ module.exports = (req, res, next) => {
     throw new LoginDataError('Необходима авторизация!');
   }
   const token = authorization.replace('Bearer ', '');
+  console.log(token);
   let payload;
   try {
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_PROD_KEY : 'dev-secret');
