@@ -5,11 +5,10 @@ const { NODE_ENV, JWT_PROD_KEY } = process.env;
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
-  if (!authorization || !authorization.startsWith('Bearer ')) {
+  if (!authorization) {
     throw new LoginDataError('Необходима авторизация!');
   }
   const token = authorization.replace('Bearer ', '');
-  console.log(token);
   let payload;
   try {
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_PROD_KEY : 'dev-secret');
