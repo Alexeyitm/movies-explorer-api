@@ -5,7 +5,6 @@ const LoginDataError = require('../errors/login-data-error');
 const { NODE_ENV, JWT_PROD_KEY } = process.env;
 
 module.exports = (req, res, next) => {
-  console.log(req.headers);
   const { authorization } = req.headers;
   if (!authorization) {
     throw new LoginDataError('Необходима авторизация1!');
