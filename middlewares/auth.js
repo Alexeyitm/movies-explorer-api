@@ -7,7 +7,7 @@ const { NODE_ENV, JWT_PROD_KEY } = process.env;
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization) {
-    throw new LoginDataError('Необходима авторизация1!');
+    throw new LoginDataError('Необходима авторизация!');
   }
   const token = authorization.replace('Bearer ', '');
   let payload;
@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
       NODE_ENV === 'production' ? JWT_PROD_KEY : JWT_DEV_KEY,
     );
   } catch (err) {
-    throw new LoginDataError('Необходима авторизация2!');
+    throw new LoginDataError('Необходима авторизация!');
   }
   req.user = payload;
   next();
