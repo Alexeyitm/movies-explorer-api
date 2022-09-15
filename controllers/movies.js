@@ -2,12 +2,19 @@ const Movie = require('../models/movie');
 const SendIncorrectDataError = require('../errors/send-incorrect-data-error');
 const NotFoundError = require('../errors/not-found-error');
 const NotEnoughRightsError = require('../errors/not-enough-rights-error');
+const {
+  NOT_FOUND_MOVIES_MESSAGE,
+  NOT_FOUND_MOVIE_MESSAGE,
+  INCORRECT_DATA_MOVIE_MESSAGE,
+  INCORRECT_MOVIEID_MESSAGE,
+  NOT_RIGHTS_DELETE_MOVIE_MESSAGE,
+} = require('../utils/constants');
 
 module.exports.getMovies = (req, res, next) => {
   const owner = req.user._id;
   Movie.find({ owner })
     .orFail(() => {
-      throw new NotFoundError('К сожалению, фильмы не найдены.');
+      throw new NotFoundError(NOT_FOUND_MOVIES_MESSAGE);
     })
     .then((movies) => res.send({ movies }))
     .catch(next);
@@ -47,7 +54,7 @@ module.exports.createMovie = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new SendIncorrectDataError('К сожалению, переданы некорректные данные при создании карточки фильма.'));
+        next(new SendIncorrectDataError(INCORRECT_DATA_MOVIE_MESSAGE));
         return;
       }
       next(err);
@@ -59,18 +66,18 @@ module.exports.deleteMovie = (req, res, next) => {
   const movieId = req.params.id;
   Movie.findById(movieId)
     .orFail(() => {
-      throw new NotFoundError('К сожалению, карточка фильма с указанным id не найдена.');
+      throw new NotFoundError(NOT_FOUND_MOVIE_MESSAGE);
     })
     .then((movie) => {
       if (req.user._id !== movie.owner.valueOf()) {
-        throw new NotEnoughRightsError('К сожалению, нельзя удалить чужую карточку фильма.');
+        throw new NotEnoughRightsError(NOT_RIGHTS_DELETE_MOVIE_MESSAGE);
       }
       return movie.remove();
     })
     .then((movie) => res.send({ movie }))
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new SendIncorrectDataError('К сожалению, передан некорректный id карточки фильма.'));
+        next(new SendIncorrectDataError(INCORRECT_MOVIEID_MESSAGE));
         return;
       }
       next(err);

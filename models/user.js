@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const LoginDataError = require('../errors/login-data-error');
+const { INCORRECT_LOGIN_DATA_MESSAGE } = require('../utils/constants');
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -28,12 +29,12 @@ userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new LoginDataError('Неправильные почта или пароль!');
+        throw new LoginDataError(INCORRECT_LOGIN_DATA_MESSAGE);
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            throw new LoginDataError('Неправильные почта или пароль!');
+            throw new LoginDataError(INCORRECT_LOGIN_DATA_MESSAGE);
           }
           return user;
         });

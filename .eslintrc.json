@@ -7,12 +7,6 @@
   "extends": [
     "airbnb-base"
   ],
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": "latest"
-  },
   "rules": {
     "no-underscore-dangle": [
       "error",

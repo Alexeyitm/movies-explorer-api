@@ -5,6 +5,11 @@ const NotFoundError = require('../errors/not-found-error');
 const SendIncorrectDataError = require('../errors/send-incorrect-data-error');
 const UserFoundError = require('../errors/user-found-error');
 const { JWT_DEV_KEY } = require('../utils/config');
+const {
+  INCORRECT_DATA_USER_MESSAGE,
+  USER_FOUND_MESSAGE,
+  NOT_FOUND_USER_MESSAGE,
+} = require('../utils/constants');
 
 const { NODE_ENV, JWT_PROD_KEY } = process.env;
 
@@ -29,11 +34,11 @@ module.exports.createUser = (req, res, next) => {
     }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new SendIncorrectDataError('К сожалению, переданы некорректные данные при создании пользователя.'));
+        next(new SendIncorrectDataError(INCORRECT_DATA_USER_MESSAGE));
         return;
       }
       if (err.code === 11000) {
-        next(new UserFoundError('К сожалению, пользователь c таким email уже существует.'));
+        next(new UserFoundError(USER_FOUND_MESSAGE));
         return;
       }
       next(err);
@@ -71,7 +76,7 @@ module.exports.updateUser = (req, res, next) => {
     { new: true, runValidators: true },
   )
     .orFail(() => {
-      throw new NotFoundError('К сожалению, пользователь по указанному id не найден.');
+      throw new NotFoundError(NOT_FOUND_USER_MESSAGE);
     })
     .then((user) => res.send({
       email: user.email,
@@ -79,7 +84,11 @@ module.exports.updateUser = (req, res, next) => {
     }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new SendIncorrectDataError('К сожалению, переданы некорректные данные при обновлении профиля.'));
+        next(new SendIncorrectDataError(INCORRECT_DATA_USER_MESSAGE));
+        return;
+      }
+      if (err.code === 11000) {
+        next(new UserFoundError(USER_FOUND_MESSAGE));
         return;
       }
       next(err);

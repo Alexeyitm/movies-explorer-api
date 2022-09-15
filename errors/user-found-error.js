@@ -1,7 +1,9 @@
+const { USER_FOUND_ERROR } = require('../utils/constants');
+
 class UserFoundError extends Error {
   constructor(message) {
     super(message);
-    this.statusCode = 409;
+    this.statusCode = USER_FOUND_ERROR;
   }
 }
 

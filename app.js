@@ -23,8 +23,8 @@ app.use(limiter);
 app.use(helmet());
 app.use(router);
 app.use(errorLogger);
-app.use(error);
 app.use(errors());
+app.use(error);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
