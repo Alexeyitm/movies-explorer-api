@@ -1,1 +1,1 @@
-# movies-explorer-api
+api.movies.alexeyitm.nomoredomains.sbs
